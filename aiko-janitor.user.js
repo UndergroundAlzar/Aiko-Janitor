@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Aiko Janitor
 // @namespace    aiko.janitor
-// @version      1.0.0
+// @version      1.0.1
 // @description  Janitor AI 临时生成故障的自动重试和重新生成。单击小 Aiko 打开设置，双击开关。
 // @match        https://janitorai.com/*
 // @match        https://www.janitorai.com/*
@@ -28,6 +28,8 @@
   const INTENT_AGE_MS = 4 * 60 * 1000;
   const DOUBLE_TAP_MS = 290;
   const ICON_BASE64 = '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';
+  const UNLIMITED_RETRIES = 'unlimited';
+  const LIMIT_REACHED = '已达本轮重试上限 · 等待手动操作';
   const DEFAULTS = Object.freeze({
     enabled: false, delay: 'five', seconds: 10, mode: 'auto', limit: 3,
     opacity: 85, side: 'right', position: 0.47,
@@ -78,7 +80,7 @@
       delay: validChoice(raw.delay, ['now', 'five', 'custom'], DEFAULTS.delay),
       seconds: range(raw.seconds, 1, 3600, DEFAULTS.seconds),
       mode: validChoice(raw.mode, ['auto', 'retry', 'reroll'], DEFAULTS.mode),
-      limit: range(raw.limit, 1, 10, DEFAULTS.limit),
+      limit: raw.limit === UNLIMITED_RETRIES ? UNLIMITED_RETRIES : range(raw.limit, 1, 10, DEFAULTS.limit),
       opacity: range(raw.opacity, 20, 100, DEFAULTS.opacity),
       side: validChoice(raw.side, ['left', 'right'], DEFAULTS.side),
       position: Number.isFinite(raw.position) ? clamp(raw.position, 0, 1) : DEFAULTS.position,
@@ -223,6 +225,17 @@
     inFlight = null;
   }
 
+  function retryLimitReached() {
+    return config.limit !== UNLIMITED_RETRIES && attempts >= config.limit;
+  }
+
+  function pauseRetries(reason) {
+    clearPending();
+    clearInFlight();
+    stopReason = reason;
+    idleStatus();
+  }
+
   function resetChain() {
     clearPending();
     clearInFlight();
@@ -298,22 +311,17 @@
     const info = errorInfo(element);
     if (!info || seenToasts.get(element) === info.text) return;
     seenToasts.set(element, info.text);
-    if (initial || !config.enabled || document.hidden || !syncRoute() || stopReason) return;
+    if (initial || !config.enabled || document.hidden || !syncRoute()
+      || (stopReason && stopReason !== LIMIT_REACHED)) return;
     const operation = activeIntent();
     if (operation?.kind === 'other' || (!operation && !inFlight && !pending && !info.generation)) return;
 
     if (info.kind !== 'transient') {
-      clearPending();
-      clearInFlight();
-      stopReason = info.kind === 'rate' ? '服务商已限流 · 等待手动恢复' : '授权、额度或请求受限 · 等待手动恢复';
-      return idleStatus();
+      return pauseRetries(info.kind === 'rate'
+        ? '服务商已限流 · 等待手动恢复' : '授权、额度或请求受限 · 等待手动恢复');
     }
-    if (pending) return;
-    if (attempts >= config.limit) {
-      clearInFlight();
-      stopReason = '已达本轮重试上限 · 等待手动操作';
-      return idleStatus();
-    }
+    if (stopReason || pending) return;
+    if (retryLimitReached()) return pauseRetries(LIMIT_REACHED);
 
     const view = readChat();
     const previous = inFlight || operation;
@@ -353,11 +361,7 @@
       clearPending();
       return idleStatus();
     }
-    if (attempts >= config.limit) {
-      clearPending();
-      stopReason = '已达本轮重试上限 · 等待手动操作';
-      return idleStatus();
-    }
+    if (retryLimitReached()) return pauseRetries(LIMIT_REACHED);
     const due = Math.max(pending.failedAt + delayMs(), lastAutoAt + REPEAT_GAP_MS);
     const remaining = due - Date.now();
     if (remaining > 0) {
@@ -438,6 +442,10 @@
     const old = config;
     config = cleanSettings({ ...config, ...update });
     const saved = remote || saveSettings(config);
+    if (stopReason === LIMIT_REACHED && !retryLimitReached()) {
+      stopReason = '';
+      idleStatus();
+    }
     if (config.enabled !== old.enabled) {
       resetChain();
       idleStatus();
@@ -738,6 +746,7 @@
         font-size: 16px;
       }
       .seconds { text-align: right; }
+      .limit { width: 112px; }
       .help { margin: 5px 0 0; color: var(--dim); font-size: 12px; }
       .orb-options { margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--line); }
       .opacity-row { display: flex; align-items: center; gap: 9px; margin-bottom: 1px; }
@@ -814,7 +823,9 @@
             <p class="help mode-help"></p>
           </fieldset>
           <label class="compact"><span class="label">连续重试上限</span>
-            <select class="limit" aria-label="连续重试上限"></select>
+            <select class="limit" aria-label="连续重试上限">
+              <option value="unlimited">不限次数</option>
+            </select>
           </label>
           <div class="orb-options">
             <label class="opacity-row">悬浮球不透明度
@@ -877,7 +888,7 @@
       const option = document.createElement('option');
       option.value = String(count);
       option.textContent = count + ' 次';
-      limit.append(option);
+      limit.insertBefore(option, limit.lastElementChild);
     }
 
     function viewport() {
@@ -1024,7 +1035,9 @@
       changeSettings({ seconds: range(seconds.valueAsNumber, 1, 3600, config.seconds) });
       seconds.value = String(config.seconds);
     });
-    limit.addEventListener('change', () => changeSettings({ limit: Number(limit.value) }));
+    limit.addEventListener('change', () => {
+      changeSettings({ limit: limit.value === UNLIMITED_RETRIES ? UNLIMITED_RETRIES : Number(limit.value) });
+    });
     opacity.addEventListener('input', () => {
       opacityPreview = Number(opacity.value);
       orb.style.setProperty('--orb-opacity', opacityPreview / 100);
