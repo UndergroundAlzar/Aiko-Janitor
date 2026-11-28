@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         Aiko Janitor
 // @namespace    aiko.janitor
-// @version      1.0.1
-// @description  Janitor AI 临时生成故障的自动重试和重新生成。单击小 Aiko 打开设置，双击开关。
+// @version      1.1.0
+// @description  Janitor AI 聊天页报错后自动重试或重抽。单击小 Aiko 打开设置，双击开关。
 // @match        https://janitorai.com/*
 // @match        https://www.janitorai.com/*
 // @match        https://jani.com/*
 // @match        https://www.jani.com/*
 // @icon         data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGAAAABgCAMAAADVRocKAAABIFBMVEVdCx7hpFZiHCugo5egY2VrWV6ba4bb6dBMBi5lDVxhK0rQaW2cETDto54wBBCRMVI5BiFRCir3zHTZJUypyK6kYTIzAhczARnW1a7WssLOeISciWz/AABYXVPFdDbLFTrOhjmjXWdoI01kHkiOTR//9vZdRjoA/wB6oIh2g3L//wC+1MCCOxedaYZ/ahW6hjr/5V2qqqq0iKCqVaqqVQAAfwC//79//wD/AP//f3//qqq/nz8AAADy19X15urWuMb8+PbmydLMp7fv2+L85djFmqzcw85wJUpSFi9OCS6od5GvhZbwt7G8lKmNWHFwNlG2iqNnFznPh4xnHEMzAA5NBRaPaHSFSWrzxLo9ADv92oVLAy1yR1fRtLfSl5jzmJMVNXzjAAAAYHRSTlMU/Pn8/Pz8/KAJ8f38/CH86Vr8/Pz3W538/f39AQT8/PkIo2+oAf0B/f0B/XKPBO8EA7wDAwIEAgECAwgA/fz8/Pz9/Pz9/Pv7+f39/fz7+/z8/fv8+/38/Qb80Pz9/f2VqVSJAAAQA0lEQVR42q1aB3vbxrIF0QiCXRJJFTuO7dTbX2/cig4QhaBYJJHU//8X7yxkO44jO5Jz159lmSLn7MycOTO7kDZ/ytJ+882T11M/oY3V0pr3d25ubjr/XABNW0WrKIpc7dlePOXdWudNHHLOKc0TtfPGmSfv7XffcXMzv0spTYscECzROuOoxJ/x4J/jAczPnYIE2yRxi63kmT6OQupROnyjdTp/GED9dOwkMogia+uW0SogbkSoFZUl2zqAf/FHPQB5yq1llykJhSAiSmTE8k20Wq2s8s55SiK0L5PnbRkxyqI0lFUVMCaHwSrbrhhiRGhmW+DtzdcDaPPXyZZ6RMaVlAxLspDlEcwTgUUoz6M3f8ADFNWdFMTLEXgPWQVLWSVWOQ0VmIIQlNuJ9rUA2nz6JqNiu93msE1omCMwMk0Zy6sqzVnjAzDjsfaVHgzclLMiSwOUmEdZUW63tkhhXnjwIQiYIJxyTqJx52sANM3NOUuVFdj3wm1R2XYqucxpszwWSOap8vYs5+XNcwE62tuV5FRlFeYJImXnaUaplEJWaSY8AhrJHAj4IUFF3DwPQPve2WJzBKFQQfA8u5DMDmlVbIUEFL4lIJGXXxAA8I3zn9ozPXBSfI4KwUKEwIMOMZYxHmQh3AhyJlMknCBAAWiGVBfOl8jyqH3JwBy4oALE061ExKmoQM+CkQwVkTHsHZuQgfoaAuHpAC/mjs2ykKsYiIagBbgpPRrIMAxtxvNcgKtSFQfnrEHIk7fa0wFe3pE05QQkRIbxcRu7ZpKHQUiIuBDwRMVOBoIrEjGpgpQmT/fgBvJsQw6IJ0IVIARceABQlgjy7lFUAhGkQVA+oNo5Ld52ngiACna3jEM6CSiEzwY57CoA5ikEKSgSAPcAShUDOIA9ThLVrx/pEL/1YFxmHPY9RhB3JLpSBhj+p8wTDwAsbTbtSQlVFUACV5mrdbTOUzzorBSBsGcEAaFosqj+Jw6NA8oDCAZRCfZkqEqawjeI0kpT7eP3ADqdRAUesRae2iEAZAMHDVUv40WUbsVC2oRfKsvIELEz4o61G+e3Nf0JgBa/2z8qjIgAxgJPvdBs02uYpbTVhh+IEQ1C1S9opuv6Jl0lsfs7ANr8+4Rw6PBBqAoTGaoraOYVACiT9B0ApC9UeEpKPJYue6enMQ0Fsb8M8N/zgVN5iDf2DyueqKSnvFDBoEwRh/MQtUdJkdtAIEIWmUGyuNfrnepEFNs77Ys56GhvUh5m7+wDQFaSB42eUdW/VEVBQAFg1ixNQaeyp+tDgwzhgb7xHrP/McDNfLZFC5BEbRbpxO5ZTtjhIfTIZEMnysGt+r5mWU7l+vS0N6TGATjrwqO281um/gLQ+a+xKYRti1ARRfUZEQj0F6lo7gVeCKVAt1dYpPb7l6iGBqBnts31ep9CnWgx/vHm9evPAMCBlJdRIBgogqgoFjIaVA1/IG9Is3JAEV8cfX9xmUvP7J329PU+6fVKaAoTSlU1BKrzCEDnx6ktI2cVCtkoMUUKSEhlGsA6ygvUZ0SgslB+ACD+wgx4uu7pZbm5VjigX+redTQnehwADlRs1okYU9wmTY6JQJOUKbgkQXcgwAFongLwfbrrhqTQjdxsu7rKBTgGnt4F9uAzANOMOQ4CiwoApYkXEKQT7cuUFzJX4VHK0MRPSLFYLHaLWqlstjmUsaJRrvgsJYm0Hx8HcCqWRJAHGAiVA0EzDYV1ffS8oMlDY1/QQHSbVZuCQKn2RZHpp7oOiYdCsXL8sQMf5eA/xq4MbAmNYIqRiDW0gEl5ueteKCqhlIW8QD5oLWpCEKRFXUNJDtnp8LDUy0qNMSx1p5+qwwcX/sUpM1UCIehBvBBa7Hk5q/v0eIBpGAarQFYqa9H3gUB8eqwDmm1P9VDu0yDIq7xIPhWLj86PWmKnaDEyDACAIqMh7Aa1TxY1hiChMEjjwCJY+KgI4mfk/pIQq7QhukWAd8gyKMa/HsPeASBqmqPOSBitaK5oo2ZoGrBgcexemopNEP1GxZGCI1n0+/3dUfd5wWAbn6GywgkijCxRTh/JAYR86thcukXFVIgICyh6FcuZWdc7v3/koVT1rBTpIiDH+/7CLMrrONvsKaRbqsiqMVMUyTZwB79l0WBV2RlnUeJi45ijlX1UWR7Ul0KFuyYUwzVRBwO6OMh6l+nXD2tjbvhBKBdYDnKnjhNsH6uDsQXa2NWqUhwKcqkGcwQjrRVbCOkHnNVqlhPCq0m921xfr1HESYl/s6JQLZV66YUQqfM2LR4ttKnrFqyKwGOGEEGfFUuDLvi6OCLgteR1rXhOg4WE/bXJTb2n25v1+novAY9Z0q6ELP/qZMNHQtRwSMqozdGkcjVvqd5OYJqQo26aZv9eivqgEOTi/hDHvaGhr/V1fFFem1wicYxu9DjLEjfNnUcLTdPiYIhxSAaqkWMMRSv0pG+WZhPtdWn25eVBlUbtm2aMJrzu9fQl3a8v+NHMRZjFrSu8LOVKe7wO/naX5GoQxMGIVbBPmGeY/mIN67peAsVcoAcAXO52JIb1de+02+PZkNBjNwi8yDxpnZzoejyea4NHADqdKFMnDpFXWaaGhfyCZrEeXyewteSHtR4fd0dMA8TrC7p8dfoK+naJTHS56N6bQVhetVrnLSx99LhU3OFEk9rQOZlWiD9OeVzU6+s4TXrrtVnqa3hwgRTXQbDg5qvTy37/tOcdugsqURT5/gc40Grd3rZaV7OZNh/8GuDFfGxTuo1UH6gwnl9g+s2zVF9fp8F6DbqsX/Ui2vfqur8jSoaGr6CmvWVhdgm9vN9t0u3kpAXjt8oN0xxpvyT33dc7watoq8SgYpnM1MiQxgg/k+iHaLyvusNDcFwsVLsGwmUXxbxYdBcLLrv9RZmVKgWt2xMVpvPzq9Fg8AmAE9LoX1010WKUuMghRWjvYNCBF8PTV6fY7yVdYOtQwwZBld9OkHuKDBAZZfqtilADcYJvTH3+4mOADgBs56/DRu3CIEfnh6DyoF5uODFPT/v33V76YPr9Uj1t0RcLFMmuTCsA3N6qJLROVKRO1tM/fRKicDh4oyYuEDWoIFvqwsO7XPQyTno97F8u3m/df9g+7NfyeG8aYbxnKkK3TQKaTJy0zNEH0+/OZYHtuB40IrzA8MyVZnOPo7dgh+ZRPBjFl92xVi/4CgwSsiNJYaKZxa0H47fN/lW4Rpr260qOWbryWKaORBW6Fg3sABN6cBQL9MfdbgH2+IvMNJGNfs/0H9whfLOyrCJgCuD2G5hWOQBGa6K/a50f6mC8ClyCqRY+VGGorhGGqDfO+rsm2ipAvrns3mP1uw8e4BWpW2YXp/T4CjT9ttm6itE3rRPzU4D54C6hMrIrdeYOAyqy4X3XDJisFR9BGJjbQfTU6or3HujFpnu6zzfL3nIyeahkACn7zkD7ZKqYdxIvX9sYmzObBeqeywRFuuaONNYbg/WDB/V7B8roItuaWxHrQzWkwvw3sA+iTkaDR8Z3TF3lFnoX2rYaj9K4DA1dX/gfkbPbVRF6cMAnZYnml5Ws+OFqospxOfm2CQ/sP3YZ/XLuWK6O85YIENUKZ73S2JRWLD9GqJHjnd/wdVdG6nLBY/n65OTk1sT8uG59O0GMJvrg0QPIC0jULKBbSbJM4Driwrb2FSviDfE/YPhiRxRh6fkmLvMcE99BNkWgtBod4ltFoI/s/3oKQ3VrrsiTXGaYOitpX5o27j/0eGMI/q7AGvP8YMYx2FluCS/suNWQ56QFVZzA/HTw2VMmimNcsE2SbHnFcAI7PbWC8KKwo6Qs9sdm2FIohlXGRXWRrkpBKzfWFXlUHbfQoWdK5rTPH8Rxk7BNI831cBYO7WJYBQUL0rSyRtcxlnmsjzXam1tV29IqQ9yCjKdrXZ88SN16qv3fWPvb4Mt3FYMppImmW/Q3y67cu8gu7DI2iKFfd/tqqo6zg+WWzrRksrkRHJldffKNamboNPPJd/Pvv3hXoW4E3DzQnRQ3FGkym86uE904t6wrw9qb95gZY+MqLKbz+VvHGcwHg5ne6k4Qpu4E9seT1rffafMXX7rx0rRxWThoEWWxTUbFZrOJDd5uW5bBfXNvdvvmtcGt0XSshtypvt9j+z2EaTRTlxUT0Ej7yOxnLqqaOh9MR2XYbp+fW8bZGb+6MgzODcsqI4OfnRejZDQdaKMjaGUp5uAj6rHF/O+/F6IPGLiaDWnbMM5DA5s3rDY3DOMMFAXcGbeSxLLuRpno9wXfI2Dzfwwmk8E/vv9u/L32+wDKyUFMeFtZNH6wTGvk0vaZYbRxvD0zzng+Wi3dMyteQDYW/uFu8O8vB6DSRHv61XLn7sB9bJVf/YD9j5aJa521aUh8Zb+tx9EKLmzQdVSdx8rUX/7e+os2/5+nAswQcbVnw/L5n3+Kh6tkZGP7xk8/GX5oWfEqWro6pm8C7UhBp/mf5t999+S76858auFqxbKsH3TKz8+M0RBPuRKXAPLcP4x+PouHw+H1xlcOQLYHDbs/w/rHAWYH23KvLTAINtv+CC4MkysVJsTLaJ/Hy3h5nR0eRo1yOteed/sOABcltgf9/wz7nIySVbkvNoYVG7ZrtNvGJrMzdx2bMM/TmdZ5/gOKwcu5DkvWT22f+5Y1sjNzszFBV/es3W6bRny9KXrddYYD5yfnvic/w5mVbd+wzpFZVHFsjK5HmWuahovMuPHGti3otG76/nH0lU+hknOEAhxC9RqGjr/GPl7q+lKtVWK24wmaCzwok9ngax4STZGBMyTZsn6G8XgVH4wk+rCSvRGr7oX+ExvldDB4PoDiyln7DIk4A0oyTCw48G6tllFyrXe/0R8ADAwRg2cDJFA3iA/iBIARnv4lyXv7cYxL0j10dF2gCjLX2DvP9kA5oJRUYZz9bI2Gq3g5/LCSpIBC8M0aQ41/3PO27YB1zwLoAMAHhN8GhqUvo2W8GjbRX9pGlFg+Qesh+gMAmLyZPf6k6HMAN40Davk+QgQHlskwetj+HhNLM8f0+6WakfzCPG8/F0AbnV+B72g1ygk3iUDM4TsCxUmihrHFzj/GzVVGpo+M5wIMEnQZveijsIxz7i4bgHcpBkWb48H9YmM+TGOoPWfQmT8vRNi8i6Pr4r6+MtzVqvFgiQfJSEbcBManC8h1s1xr/xkHPgvQGcz2hqsOGjiJXSfqEXUSNzFKYr2ZVnfnQuoPp1pejpx/u3luHXRmbowDGuS+mzQLWjQaXSdF86yFZ2vdHMb3CzVHZu70s3L6JS1yZoX0fXG/wO3sodDdCFcg2aEZUOlBn/QwL4GpRrYfjb9K7ODzrDxkNXk/9j6cMlVIfAPDoo4+bdaXyd34defr1FSNwsmdngkQ8pdFyMHcr81WL0niZHR35/yh30p42Xk9cFAFwYclizieznRzEs8cR/vfzmvtD//qiYZ198saw7HO3WjkvP6n/nbOr7PzcEB90m+G/D8AL7TSqpssyAAAAABJRU5ErkJggg==
+// @downloadURL  https://raw.githubusercontent.com/UndergroundAlzar/Aiko-Janitor/main/aiko-janitor.user.js
+// @updateURL    https://raw.githubusercontent.com/UndergroundAlzar/Aiko-Janitor/main/aiko-janitor.user.js
 // @run-at       document-idle
 // @noframes
 // @sandbox      DOM
@@ -23,43 +25,42 @@
   if (document.getElementById(HOST_ID)) return;
 
   const STORAGE_KEY = 'aiko-janitor.settings.v1';
-  const READY_WINDOW_MS = 9500;
-  const REPEAT_GAP_MS = 2000;
-  const INTENT_AGE_MS = 4 * 60 * 1000;
   const DOUBLE_TAP_MS = 290;
   const ICON_BASE64 = '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';
   const UNLIMITED_RETRIES = 'unlimited';
-  const LIMIT_REACHED = '已达本轮重试上限 · 等待手动操作';
   const DEFAULTS = Object.freeze({
-    enabled: false, delay: 'five', seconds: 10, mode: 'auto', limit: 3,
+    enabled: true, delay: 'five', seconds: 10, mode: 'auto', limit: UNLIMITED_RETRIES,
     opacity: 85, side: 'right', position: 0.47,
   });
 
   const UI = {
-    composer: '[data-chat-composer]',
-    layout: '[class*="_chatLayoutWrapper_"]',
-    scroller: 'main[class*="_messagesMain_"] > [class*="_scroller_"]',
-    message: 'li[class*="_messageDisplayWrapper_"]',
-    footer: '[class*="_messageFooterActions_"]',
-    choices: '[class*="_botChoicesContainer_"]',
-    slider: '[class*="_botChoicesSlider_"]',
-    choice: 'button[class*="_botChoiceButton_"]',
-    next: 'button[class*="_botChoiceButton_"][class*="_right_"]',
-    more: 'button[class*="_scrollToBottomButton_"]',
-    send: 'button[class*="_sendButton_"]',
-    stop: 'button[class*="_stopButton_"]',
-    continue: 'button[class*="_controlPanelButton_"]',
-    toast: '[data-sonner-toaster] [data-sonner-toast], [role="alert"][data-status="error"]',
+    composer: '[data-chat-composer], [class*="chatComposer"], [class*="_chatInputContainer_"]',
+    layout: '[class*="chatLayoutWrapper"], [data-chat-layout]',
+    main: '[class*="messagesMain"], [data-chat-messages], [role="log"]',
+    row: ':is([data-index], [data-item-index]):not([data-sonner-toast])',
+    message: ':is([class*="messageDisplayWrapper"], [data-message-id], [data-message-author-role], [data-message-role], [data-testid="chat-message"])',
+    choices: '[class*="botChoicesContainer"], [data-reply-choices], [data-testid="reply-choices"], [aria-roledescription="carousel"]',
+    slider: '[class*="botChoicesSlider"], [data-reply-slider], [data-carousel-track]',
+    counter: '[class*="messageCounter"], [data-reply-counter]',
+    choice: 'button[class*="botChoiceButton"]',
+    next: 'button[class*="botChoiceButton"][class*="_right_"]',
+    more: 'button[class*="scrollToBottomButton"]',
+    send: 'button[class*="_sendButton_"], button[data-action="send"]',
+    stop: 'button[class*="_stopButton_"], button[data-action="stop"]',
+    prose: 'pre, code, [contenteditable="true"], [data-message-content], .markdown-body, .markdown, [class*="_markdown_"]',
+    typedError: '[data-type="error" i], [data-status="error" i], [data-severity="error" i], [data-chat-error], [data-testid="error-banner"], [class*="errorBanner"], .error-banner, .toast-error, .alert-danger, .Toastify__toast--error, .MuiAlert-standardError, .MuiAlert-filledError, .MuiAlert-outlinedError',
+    notice: '[data-sonner-toast], [role="alert"], [aria-live="assertive"], [data-toast], .Toastify__toast, [role="status"]',
   };
+  const NOTICE_SELECTOR = UI.notice + ', ' + UI.typedError;
   const RETRY_ICON = /^M256 48C141\.6 48 48 141\.6 48 256s93\.6 208 208 208.*zm112 194h-98/i;
-  const RETRY_LABEL = /^(?:re[\s-]?generate(?: last (?:answer|reply|response))?|retry(?: (?:generation|last (?:request|message)|failed request))?|重新生成(?:上[一个條条次]+(?:回答|回复|回覆|答案)|最后[一条个]*(?:回答|回复|答案))?|重试(?:生成|回复)?|重新產生(?:最後一個回覆)?|重試)$/i;
-  const CONTINUE_LABEL = /^(?:continue this message|继续(?:此条|这条|此|这则|这则)?消息|繼續這則訊息)$/i;
-  const AMBIGUOUS_NETWORK = /a network error occurred,\s*you may be rate limited or having connection issues/i;
-  const RATE_LIMIT = /\b429\b|\btoo many requests\b|\brate[\s-]?limit(?:ed|ing)?\b|(?:请求|請求)(?:过于频繁|過於頻繁|次数过多|次數過多)|速率限制|限流/i;
-  const HARD_ERROR = /\b(?:400|401|402|403|404|405|413|422)\b|invalid (?:api[ -]?key|token|credentials|model)|(?:api[ -]?key|token) (?:is )?(?:invalid|missing|expired|incorrect)|no active .*key|authentication|unauthorized|forbidden|insufficient (?:quota|credit|balance|funds)|quota (?:exceeded|exhausted)|credit(?:s)? (?:exhausted|quota|limit)|payment required|context (?:length|limit)|content (?:filter|policy)|余额不足|餘額不足|额度(?:不足|用完|耗尽)|配额(?:不足|已用尽|超限)|密钥(?:无效|错误|失效)|未授权|禁止访问/i;
-  const OTHER_FEATURE = /failed to (?:commit|save|update|delete|load|publish|unpublish|post|edit|rate|create chat|stream summary|generate suggestion)|sending took too long|error occurred when (?:editing|rating)|保存(?:失败|失敗)|编辑(?:失败|失敗)|加载(?:失败|失敗)|发送超时|发送耗时过长/i;
-  const GENERATION_ERROR = /proxy error|upstream (?:error|server|provider)|failed to (?:stream answer|continue message)|no response from bot|provider (?:returned error|temporarily unavailable|is overloaded|error)|代理(?:错误|錯誤)|生成(?:回复|回覆|回答)(?:失败|失敗)/i;
-  const TRANSIENT_ERROR = /\b(?:408|500|502|503|504|522|524)\b|failed to fetch|network (?:error|request failed)|load failed|fetch failed|networkerror|timed?\s*out|connection (?:reset|closed|dropped)|temporarily unavailable|service unavailable|(?:server|provider) (?:is )?(?:busy|overloaded)|no response from bot|failed to stream answer|生成(?:回复|回覆|回答)(?:失败|失敗)|网络(?:错误|异常)|連線(?:錯誤|中斷)|连接(?:超时|中断|异常)|请求超时|暂时无法(?:连接|使用)|连接问题/i;
+  const RETRY_LABEL = /^(?:re[\s-]?generate(?: (?:the )?last (?:answer|reply|response))?|re[\s-]?try(?: (?:generation|(?:last|failed|this) (?:request|message|reply)))?|try again|重新生成(?:上一[个個条條次](?:回答|回复|回覆|答案)|最后一[个条次](?:回答|回复|答案))?|重新產生(?:上一[個條]回覆)?|(?:重新|再次)?(?:重试|重試|尝试|嘗試)(?:生成|回复|回覆)?)$/i;
+  const REROLL_LABEL = /^(?:re-?roll(?: (?:response|reply))?|(?:generate|create) (?:a |another |new )+(?:reply|response|answer)|re-?generate (?:response|reply|answer)|重抽(?:回复|回覆)?|生成(?:新|另一[个条則])(?:回复|回答|回覆)|重新生成(?:回复|回答|回覆))$/i;
+  const NEXT_LABEL = /^(?:next(?:\s*[-—·].*)?|下一[步条條則页頁個个](?:[-—·].*)?)$/i;
+  const STOP_LABEL = /^(?:stop(?: generating| generation)?|cancel|取消|停止(?:生成)?)$/i;
+  const SEND_LABEL = /^(?:send(?: message)?|发送(?:消息)?|傳送|發送)$/i;
+  // Some interrupted streams are announced as an informational toast by the site.
+  const INTERRUPTED_NOTICE = /connection (?:dropped|lost)|tap (?:to )?continue|(?:连接|連線)中[断斷]|(?:點擊|点击).{0,3}[继续繼續]{2}.{0,8}(?:生成|中断|中斷)/i;
+  const FAILURE_IN_STATUS = /\b(?:error|failed|failure|exception|unavailable|unauthorized|forbidden|timed out|too many requests|HTTP\s+[45]\d\d)\b|发生错误|發生錯誤|失败|失敗|出错|出錯|エラー/i;
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const range = (value, min, max, fallback) => Number.isFinite(value)
@@ -68,7 +69,7 @@
   const normalizeText = (text) => (text || '').replace(/\s+/g, ' ').trim();
   const isElement = (node) => node?.nodeType === Node.ELEMENT_NODE;
   const hasBox = (element) => Boolean(element?.isConnected && element.getClientRects().length);
-  const usable = (element) => hasBox(element)
+  const usable = (element) => hasBox(element) && typeof element.click === 'function'
     && !element.matches(':disabled, [aria-disabled="true"]')
     && !element.closest('[hidden], [inert], [aria-hidden="true"]')
     && getComputedStyle(element).visibility === 'visible';
@@ -76,7 +77,7 @@
   function cleanSettings(value) {
     const raw = value && typeof value === 'object' ? value : {};
     return {
-      enabled: raw.enabled === true,
+      enabled: typeof raw.enabled === 'boolean' ? raw.enabled : DEFAULTS.enabled,
       delay: validChoice(raw.delay, ['now', 'five', 'custom'], DEFAULTS.delay),
       seconds: range(raw.seconds, 1, 3600, DEFAULTS.seconds),
       mode: validChoice(raw.mode, ['auto', 'retry', 'reroll'], DEFAULTS.mode),
@@ -113,86 +114,119 @@
       && !/\/(?:chats?\/)(?:public|new|preview)$/i.test(path) ? path : '';
   }
 
-  function readVariants(wrapper) {
-    const slider = wrapper?.querySelector(':scope > ' + UI.slider);
-    if (!slider) return null;
-    const count = slider.children.length;
-    if (!count || !Array.from(slider.children).every((child) => child.matches(UI.message))) return null;
-    if (count === 1 && !slider.style.transform) return { count, current: 1 };
-    // The counter fades out. The slider's target translateX still exposes the selected index.
-    const offset = /^translateX\(\s*(-?\d+(?:\.\d+)?)%\s*\)$/i.exec(slider.style.transform);
-    if (offset) return { count, current: 1 - Number(offset[1]) / 100 };
-    const counter = wrapper.querySelector(':scope > [class*="_messageCounter_"]');
-    const numbers = /^(\d+)\s*\/\s*(\d+)$/.exec(normalizeText(counter?.textContent));
-    return numbers && Number(numbers[2]) === count ? { count, current: Number(numbers[1]) } : null;
+  function labelsMatch(button, pattern) {
+    return [button.getAttribute('aria-label'), button.getAttribute('title'), button.textContent]
+      .some((label) => label && label.length < 120 && pattern.test(normalizeText(label)));
   }
 
   function isRetryButton(button) {
-    if (RETRY_LABEL.test(normalizeText(button.getAttribute('aria-label')))
-      || RETRY_LABEL.test(normalizeText(button.getAttribute('title')))) return true;
-    return button.matches('button[class*="_footerActionButton_"]')
-      && Array.from(button.querySelectorAll('svg path')).some((path) => RETRY_ICON.test(path.getAttribute('d') || ''));
+    if (button.matches('[data-action="retry"], [data-testid="retry-generation"]') || labelsMatch(button, RETRY_LABEL)) return true;
+    const path = button.querySelector('svg path');
+    return Boolean(path && RETRY_ICON.test(path.getAttribute('d') || ''));
+  }
+
+  function readVariants(wrapper) {
+    if (!wrapper) return null;
+    const counters = wrapper.querySelectorAll(UI.counter + ', :scope > span, [role="status"]');
+    for (const counter of counters) {
+      if (counter.childElementCount || counter.closest(UI.prose)) continue;
+      const numbers = /^(\d+)\s*(?:\/|of)\s*(\d+)$/i.exec(normalizeText(counter.textContent));
+      if (numbers) return { count: Number(numbers[2]), current: Number(numbers[1]) };
+    }
+
+    const slider = wrapper.querySelector(UI.slider);
+    if (!slider) return null;
+    const count = slider.querySelectorAll(UI.message).length || slider.childElementCount;
+    if (!count) return null;
+    const offset = /^translate(?:X|3d)?\(\s*(-?\d+(?:\.\d+)?)%\s*[,)]/i.exec(slider.style.transform);
+    if (offset) return { count, current: 1 - Number(offset[1]) / 100 };
+    return { count, current: count === 1 ? 1 : null };
+  }
+
+  function chatControls(scope) {
+    return Array.from(scope.querySelectorAll('button, [role="button"]')).filter((button) =>
+      !button.closest(UI.prose) && !button.closest('nav, [data-chat-header], [role="dialog"], [data-sonner-toast]'));
+  }
+
+  function shownElement(root, selector) {
+    return Array.from(root.querySelectorAll(selector)).find(hasBox);
+  }
+
+  function findButton(controls, matches) {
+    const candidates = controls.filter(matches);
+    return candidates.find(usable) || candidates[0] || null;
   }
 
   function readChat() {
-    const composer = composerNode;
-    const layout = composer?.closest(UI.layout);
-    if (!layout || !hasBox(composer)) return null;
-
-    const scroller = layout.querySelector(UI.scroller);
-    const rows = scroller?.querySelectorAll(':scope > div > [data-index]');
-    const row = rows?.length ? rows[rows.length - 1] : null;
-    const message = row?.querySelector(UI.message);
-    const index = row && /^\d+$/.test(row.dataset.index) ? Number(row.dataset.index) : null;
-    const atTail = row && row.parentElement.getBoundingClientRect().bottom - row.getBoundingClientRect().bottom < 56;
-    const retry = atTail && message
-      ? Array.from(message.querySelectorAll(UI.footer + ' > button')).find(isRetryButton) : null;
-    const choices = atTail ? row.querySelector(':scope > ' + UI.choices) : null;
-    const next = choices?.querySelector(':scope > div > ' + UI.next);
+    const composer = shownElement(document, '[data-chat-composer]') || shownElement(document, UI.composer);
+    const layout = composer?.closest(UI.layout) || shownElement(document, UI.layout) || document;
+    const main = shownElement(layout, UI.main) || shownElement(layout, 'main') || layout;
+    const messages = main.querySelectorAll(UI.message);
+    const last = messages[messages.length - 1];
+    const rows = last ? null : main.querySelectorAll(UI.row);
+    const row = last?.closest(UI.row) || rows?.[rows.length - 1] || last?.closest(UI.choices) || last;
+    const scope = row || main;
+    const controls = chatControls(scope);
+    const namedNext = row && findButton(controls, (button) => labelsMatch(button, NEXT_LABEL));
+    const knownChoices = scope.matches?.(UI.choices) ? scope : shownElement(scope, UI.choices);
+    const choices = knownChoices || (namedNext && (namedNext.closest('footer, [role="toolbar"], [role="group"]') || row));
     const variants = readVariants(choices);
-    const lastVariant = Boolean(variants && variants.current === variants.count);
+    const next = choices && findButton(controls, (button) => choices.contains(button)
+      && (button.matches(UI.next) || labelsMatch(button, NEXT_LABEL)));
+    const direct = findButton(controls, (button) => button.matches('[data-action="reroll"], [data-testid="reroll-response"]')
+      || labelsMatch(button, REROLL_LABEL));
+    const retry = findButton(controls, (button) => !button.closest(UI.choices) && isRetryButton(button));
+    const reroll = usable(direct) ? direct : (variants && variants.current === variants.count ? next : null);
+    const indexText = row?.getAttribute('data-item-index') ?? row?.getAttribute('data-index');
+    const index = indexText && /^\d+$/.test(indexText) ? Number(indexText) : null;
+    const messageId = row?.getAttribute('data-message-id') || last?.getAttribute('data-message-id');
+    const jump = shownElement(layout, UI.more);
+    // Virtual lists may leave space for unmounted rows. Only use geometry when the site offers a jump.
+    const needsJump = usable(jump) && (!row || (index !== null &&
+      row.parentElement.getBoundingClientRect().bottom - row.getBoundingClientRect().bottom > 56));
+    const stop = shownElement(composer || layout, UI.stop) || (composer &&
+      findButton(Array.from(composer.querySelectorAll('button')), (button) => labelsMatch(button, STOP_LABEL)));
     return {
-      composer, index: atTail ? index : null, retry, next, variants, lastVariant,
-      jump: layout.querySelector(UI.more),
-      busy: Boolean(composer.querySelector(UI.stop) || (atTail && row.querySelector(UI.message + '[aria-busy="true"]'))),
+      composer, row, index, messageId, variants, choices, retry, reroll, next, jump, needsJump,
+      busy: usable(stop) || Boolean(row?.matches('[aria-busy="true"]') || row?.querySelector(UI.message + '[aria-busy="true"]')),
     };
   }
 
-  function errorInfo(element) {
-    if (!element.isConnected || element.closest(UI.message + ', ' + UI.composer)
-      || element.matches('[data-removed="true"], [data-visible="false"]')) return null;
-    if (element.matches('[data-sonner-toast]') && element.dataset.type !== 'error') return null;
-    if (!element.matches('[data-sonner-toast]')
-      && (element.dataset.status || element.getAttribute('data-type')) !== 'error') return null;
-
+  function noticeText(element) {
     const title = element.querySelector('[data-title]');
     const description = element.querySelector('[data-description]');
-    const text = normalizeText(title
-      ? title.textContent + ' ' + (description?.textContent || '') : element.textContent).slice(0, 2500);
-    if (!text || OTHER_FEATURE.test(text)) return null;
-    const classic = AMBIGUOUS_NETWORK.test(text);
-    const detail = text.replace(AMBIGUOUS_NETWORK, '');
-    const generation = classic || GENERATION_ERROR.test(text);
-    if (RATE_LIMIT.test(detail)) return { kind: 'rate', text, generation };
-    if (HARD_ERROR.test(detail)) return { kind: 'hard', text, generation };
-    if (classic || TRANSIENT_ERROR.test(text)) return { kind: 'transient', text, generation };
+    return normalizeText(title ? title.textContent + ' ' + (description?.textContent || '') : element.textContent);
+  }
+
+  function errorNotice(element) {
+    if (!element.isConnected || !element.matches(NOTICE_SELECTOR) || element.closest(UI.prose)
+      || element.closest('[hidden], [aria-hidden="true"], [data-removed="true"], [data-state="closed"]')) return null;
+    const toast = element.closest('[data-sonner-toast]');
+    if (toast && toast !== element) return null;
+    const typedError = element.matches(UI.typedError);
+    if (!typedError && !toast && element.querySelector(NOTICE_SELECTOR)) return null;
+
+    const type = (element.dataset.type || element.dataset.status || element.dataset.severity || '').toLowerCase();
+    const message = noticeText(element);
+    // The site's error marker is sufficient in every language, including an empty error toast.
+    if (typedError) return { message };
+    if (type === 'success' || type === 'loading'
+      || element.closest('.Toastify__toast--success, .MuiAlert-standardSuccess, .alert-success')) return null;
+    if (message && (INTERRUPTED_NOTICE.test(message) || FAILURE_IN_STATUS.test(message)
+      || (!type && !toast && element.matches('[role="alert"], [aria-live="assertive"]')))) return { message };
     return null;
   }
 
   let config = loadSettings();
   let route = '';
-  let composerNode = null;
-  let mounted = false;
-  let intent = null;
   let pending = null;
   let inFlight = null;
+  let previousSend = null;
   let attempts = 0;
-  let lastAutoAt = -Infinity;
-  let stopReason = '';
   let tickTimer = 0;
-  let inFlightTimer = 0;
+  let nextTickAt = Infinity;
   let currentStatus = { tone: 'off', text: '' };
-  const seenToasts = new WeakMap();
+  let seenNotices = new WeakMap();
 
   const host = document.createElement('aiko-janitor');
   host.id = HOST_ID;
@@ -208,144 +242,120 @@
   }
 
   function idleStatus() {
-    if (!config.enabled) return status('off', '自动重试已关闭');
-    if (stopReason) return status('warn', stopReason);
-    return status('on', '等候生成报错');
+    if (config.enabled) status('on', '等候聊天页报错');
+    else status('off', '自动重试已关闭');
   }
 
-  function clearPending() {
+  function clearTimer() {
     clearTimeout(tickTimer);
     tickTimer = 0;
-    pending = null;
-  }
-
-  function clearInFlight() {
-    clearTimeout(inFlightTimer);
-    inFlightTimer = 0;
-    inFlight = null;
-  }
-
-  function retryLimitReached() {
-    return config.limit !== UNLIMITED_RETRIES && attempts >= config.limit;
-  }
-
-  function pauseRetries(reason) {
-    clearPending();
-    clearInFlight();
-    stopReason = reason;
-    idleStatus();
+    nextTickAt = Infinity;
   }
 
   function resetChain() {
-    clearPending();
-    clearInFlight();
-    intent = null;
+    clearTimer();
+    pending = null;
+    inFlight = null;
+    previousSend = null;
     attempts = 0;
-    stopReason = '';
   }
 
   function syncRoute() {
     const next = chatKey();
-    if (route !== next) {
-      route = next;
-      composerNode = null;
-      resetChain();
-      widget.close(false);
-      idleStatus();
-    }
-    if (route && !composerNode?.isConnected) composerNode = document.querySelector(UI.composer);
-    const show = Boolean(route && composerNode?.closest(UI.layout));
-    if (show !== mounted) {
-      mounted = show;
-      host.hidden = !show;
-      if (show) widget.place();
-      else {
-        resetChain();
-        widget.close(false);
-        idleStatus();
-      }
-    }
-    return mounted;
-  }
-
-  function activeIntent() {
-    return intent && Date.now() - intent.time <= INTENT_AGE_MS ? intent : null;
-  }
-
-  function manualAction(kind, index = null, minIndex = null) {
+    if (route === next) return;
+    route = next;
     resetChain();
-    intent = { kind, index, minIndex, time: Date.now() };
+    host.hidden = !next;
+    widget.close(false);
+    if (next) widget.place();
+    idleStatus();
+  }
+
+  function sameTurn(a, b) {
+    if (!a || !b) return false;
+    if (a.index !== null && b.index !== null) return a.index === b.index;
+    if (a.messageId && b.messageId) return a.messageId === b.messageId;
+    return Boolean(a.row && a.row === b.row);
+  }
+
+  function snapshot(view, kind) {
+    if (!kind || view.busy || view.needsJump) return null;
+    return { kind, row: view.row, index: view.index, messageId: view.messageId, count: view.variants?.count || 0 };
+  }
+
+  function replyArrived(before, view) {
+    if (!before || view.busy || view.needsJump) return false;
+    if (before.kind === 'reroll') return sameTurn(before, view) && view.variants?.count > before.count;
+    if (view.retry || !(view.choices || view.reroll)) return false;
+    if (before.index !== null && view.index !== null) return view.index > before.index;
+    return Boolean(before.row && view.row && !sameTurn(before, view));
+  }
+
+  function manualAction(isSend = false) {
+    resetChain();
+    if (isSend) previousSend = readChat();
     idleStatus();
   }
 
   function observeManualClick(event) {
-    if (!event.isTrusted || !isElement(event.target) || !syncRoute() || event.target === host) return;
-    const button = event.target.closest('button');
-    if (!button || !usable(button)) return;
-    const view = readChat();
-    if (!view) return;
-    if (view.composer.contains(button)) {
-      if (button.matches(UI.stop)) manualAction('other');
-      if (button.matches(UI.send)) manualAction('retry', null, view.index === null ? null : view.index + 1);
-    } else if (button === view.retry) {
-      manualAction('retry', view.index);
-    } else if (button.matches(UI.choice) && button.closest(UI.layout)) {
-      if (button === view.next && view.lastVariant) manualAction('reroll', view.index);
-      else manualAction('other');
-    } else if (button.matches(UI.continue) && button.closest(UI.message)
-      && CONTINUE_LABEL.test(normalizeText(button.getAttribute('aria-label')))) {
-      manualAction('reroll', view.index);
+    if (!event.isTrusted || !route || !isElement(event.target) || event.target === host) return;
+    const button = event.target.closest('button, [role="button"]');
+    if (!button || !usable(button) || button.closest(UI.prose)) return;
+    if (button.closest(UI.composer) && (button.matches(UI.send) || labelsMatch(button, SEND_LABEL))) {
+      manualAction(true);
+    } else if (button.matches(UI.stop + ', ' + UI.choice) || button.closest(UI.choices)
+      || isRetryButton(button) || labelsMatch(button, REROLL_LABEL)
+      || (button.closest(UI.composer) && labelsMatch(button, STOP_LABEL))) {
+      manualAction();
     }
   }
 
   function observeEnter(event) {
     if (!event.isTrusted || event.defaultPrevented || event.isComposing || event.key !== 'Enter'
       || event.shiftKey || event.altKey || event.metaKey || event.ctrlKey || innerWidth < 768
-      || !isElement(event.target) || !event.target.matches(UI.composer + ' textarea')
-      || !event.target.value.trim() || !syncRoute()) return;
-    const index = readChat()?.index;
-    manualAction('retry', null, typeof index === 'number' ? index + 1 : null);
+      || !isElement(event.target) || !event.target.matches('textarea')
+      || !event.target.closest(UI.composer) || !event.target.value.trim() || !route) return;
+    manualAction(true);
   }
 
-  function onToast(element, initial = false) {
-    const info = errorInfo(element);
-    if (!info || seenToasts.get(element) === info.text) return;
-    seenToasts.set(element, info.text);
-    if (initial || !config.enabled || document.hidden || !syncRoute()
-      || (stopReason && stopReason !== LIMIT_REACHED)) return;
-    const operation = activeIntent();
-    if (operation?.kind === 'other' || (!operation && !inFlight && !pending && !info.generation)) return;
+  function retryLimitReached() {
+    return config.limit !== UNLIMITED_RETRIES && attempts >= config.limit;
+  }
 
-    if (info.kind !== 'transient') {
-      return pauseRetries(info.kind === 'rate'
-        ? '服务商已限流 · 等待手动恢复' : '授权、额度或请求受限 · 等待手动恢复');
+  function scheduleTick(delay = 0) {
+    if (!pending) return;
+    const at = Date.now() + delay;
+    if (tickTimer && nextTickAt <= at) return;
+    clearTimeout(tickTimer);
+    nextTickAt = at;
+    tickTimer = setTimeout(tick, delay);
+  }
+
+  function onNotice(element) {
+    const notice = errorNotice(element);
+    if (!notice) {
+      seenNotices.delete(element);
+      return;
     }
-    if (stopReason || pending) return;
-    if (retryLimitReached()) return pauseRetries(LIMIT_REACHED);
-
+    const id = element.getAttribute('data-toast-id') || element.id;
+    const previous = seenNotices.get(element);
+    seenNotices.set(element, { id, message: notice.message });
+    // Sonner may mount an empty title and fill it on a later render.
+    if (previous && previous.id === id && (!previous.message || previous.message === notice.message
+      || notice.message.startsWith(previous.message + ' '))) return;
+    if (!config.enabled || !route) return;
+    if (pending) {
+      pending.notice = element;
+      return;
+    }
     const view = readChat();
-    const previous = inFlight || operation;
-    const kind = previous?.kind || visibleAction(view);
-    if (kind && config.mode !== 'auto' && config.mode !== kind) {
-      clearInFlight();
-      return status('on', '本次报错与所选重试类型不同');
-    }
-    clearInFlight();
-    pending = {
-      kind,
-      route,
-      index: previous ? previous.index : view?.busy ? null : (view?.index ?? null),
-      minIndex: previous?.minIndex ?? null,
-      failedAt: Date.now(),
-      jumped: false,
-    };
-    tickTimer = setTimeout(tick, 0);
-  }
-
-  function visibleAction(view) {
-    if (!view || view.busy) return '';
-    if (view.retry) return 'retry';
-    return view.variants ? 'reroll' : '';
+    const kind = view.retry ? 'retry' : (view.choices || view.reroll ? 'reroll' : '');
+    // If the next attempt is already busy, retain its starting turn so a late
+    // notification cannot reroll a response that subsequently succeeds.
+    const before = snapshot(view, kind) || inFlight?.before || null;
+    inFlight = null;
+    pending = { failedAt: Date.now(), notice: element, before, jumped: false, lastChoice: null };
+    scheduleTick();
   }
 
   function delayMs() {
@@ -353,64 +363,69 @@
     return (config.delay === 'five' ? 5 : config.seconds) * 1000;
   }
 
-  function tick() {
-    clearTimeout(tickTimer);
-    tickTimer = 0;
-    if (!pending) return;
-    if (!config.enabled || !syncRoute() || !pending || pending.route !== route || document.hidden) {
-      clearPending();
-      return idleStatus();
+  function chooseAction(view, notice) {
+    if (view.busy) return null;
+    if (config.mode !== 'reroll') {
+      if (!view.needsJump && usable(view.retry)) return { kind: 'retry', button: view.retry };
+      if (notice?.isConnected && errorNotice(notice)) {
+        const button = Array.from(notice.querySelectorAll('button, [role="button"]'))
+          .find((item) => usable(item) && isRetryButton(item));
+        if (button) return { kind: 'retry', button };
+      }
     }
-    if (retryLimitReached()) return pauseRetries(LIMIT_REACHED);
-    const due = Math.max(pending.failedAt + delayMs(), lastAutoAt + REPEAT_GAP_MS);
-    const remaining = due - Date.now();
+    // A send can fail before the new user message is mounted. Its previous answer is a different turn.
+    if (config.mode !== 'retry' && !view.needsJump && usable(view.reroll) && !sameTurn(previousSend, view)) {
+      return { kind: 'reroll', button: view.reroll };
+    }
+    return null;
+  }
+
+  function tick() {
+    clearTimer();
+    syncRoute();
+    if (!pending || !config.enabled || !route) return;
+    if (retryLimitReached()) return status('warn', '已达本轮重试上限 · 调高次数可继续');
+    const remaining = pending.failedAt + delayMs() - Date.now();
     if (remaining > 0) {
-      status('wait', Math.ceil(remaining / 1000) + ' 秒后' + actionName(pending.kind || config.mode));
-      tickTimer = setTimeout(tick, Math.min(remaining, 1000));
+      status('wait', Math.ceil(remaining / 1000) + ' 秒后' + actionName(config.mode));
+      scheduleTick(Math.min(remaining, 1000));
       return;
     }
 
     const view = readChat();
-    if (view && pending.index !== null && view.index !== null && view.index !== pending.index) {
-      clearPending();
-      return status('on', '对话已变化 · 本次重试已取消');
+    if (replyArrived(pending.before, view)) {
+      resetChain();
+      return status('on', '回复已生成 · 等候下次报错');
     }
-    const available = visibleAction(view);
-    if (!pending.kind && available && config.mode !== 'auto' && config.mode !== available) {
-      clearPending();
-      return status('on', '本次报错与所选重试类型不同');
-    }
-    const wanted = pending.kind || available || config.mode;
-    const matchesTurn = pending.minIndex === null || (Number.isInteger(view?.index) && view.index >= pending.minIndex);
-    const target = wanted === 'retry' ? view?.retry : (view?.lastVariant ? view?.next : null);
-    if (view && available === wanted && matchesTurn && usable(target)) {
-      clearPending();
+    const action = chooseAction(view, pending.notice);
+    if (action) {
+      const notice = pending.notice;
+      pending = null;
       attempts += 1;
-      lastAutoAt = Date.now();
-      inFlight = { kind: wanted, index: view.index, variants: view.variants?.count ?? 0 };
-      intent = { ...inFlight, time: lastAutoAt };
-      status('wait', '已触发' + actionName(wanted) + ' · 第 ' + attempts + ' 次');
-      inFlightTimer = setTimeout(() => {
-        clearInFlight();
-        status('on', '等待页面下一次结果');
-      }, INTENT_AGE_MS);
-      target.click();
+      inFlight = { before: snapshot(view, action.kind), notice, sawBusy: false };
+      if (action.kind === 'retry') previousSend = null;
+      status('wait', '已触发' + actionName(action.kind) + ' · 第 ' + attempts + ' 次');
+      action.button.click();
       return;
     }
 
-    if (view && view.index === null && !view.busy && usable(view.jump) && !pending.jumped) {
+    if (view.needsJump && !view.busy && !pending.jumped) {
       pending.jumped = true;
       view.jump.click();
     }
-    if (Date.now() < due + READY_WINDOW_MS) {
-      status('wait', '等候' + actionName(wanted) + '按钮');
-      tickTimer = setTimeout(tick, 250);
-      return;
+    const current = view.variants?.current;
+    if (config.mode !== 'retry' && !view.busy && !view.needsJump && !sameTurn(previousSend, view)
+      && usable(view.next) && Number.isInteger(current) && current >= 1 && current < view.variants.count) {
+      status('wait', '前往最后一个回复版本 · ' + current + '/' + view.variants.count);
+      if (pending.lastChoice !== current) {
+        pending.lastChoice = current;
+        view.next.click();
+      }
+    } else {
+      status('wait', '等候' + actionName(config.mode) + '按钮可用');
     }
-    clearPending();
-    status('warn', wanted === 'reroll' && view?.next && !view.lastVariant
-      ? '当前选中较早的回复版本 · 已跳过'
-      : '未找到可用的' + actionName(wanted) + '按钮 · 已跳过');
+    // Changes to the toolbar wake the job immediately. This fallback also catches CSS-only changes.
+    scheduleTick(1000);
   }
 
   function actionName(kind) {
@@ -419,89 +434,129 @@
     return '自动重试';
   }
 
-  function checkResult() {
-    if (!inFlight) return;
-    const view = readChat();
-    if (!view || view.busy || view.index === null) return;
-    const succeeded = inFlight.kind === 'retry'
-      ? Number.isInteger(inFlight.index) && view.index > inFlight.index && !view.retry
-      : view.index === inFlight.index && view.variants?.count > inFlight.variants;
-    if (succeeded) {
-      resetChain();
-      status('on', '回复已生成 · 等候下次报错');
-    }
-  }
-
   function cancelPending() {
     if (!pending) return;
-    clearPending();
+    clearTimer();
+    pending = null;
     status('on', '本次自动重试已取消');
+  }
+
+  function scanCurrentNotices() {
+    document.querySelectorAll(NOTICE_SELECTOR).forEach(onNotice);
   }
 
   function changeSettings(update, remote = false) {
     const old = config;
     config = cleanSettings({ ...config, ...update });
     const saved = remote || saveSettings(config);
-    if (stopReason === LIMIT_REACHED && !retryLimitReached()) {
-      stopReason = '';
-      idleStatus();
-    }
     if (config.enabled !== old.enabled) {
       resetChain();
       idleStatus();
-    } else if (config.mode !== old.mode) {
-      clearPending();
-      idleStatus();
-    } else if (pending && (config.delay !== old.delay || config.seconds !== old.seconds
-      || config.limit !== old.limit)) {
-      tick();
+      if (config.enabled) {
+        seenNotices = new WeakMap();
+        syncRoute();
+        scanCurrentNotices();
+      }
+    } else if (pending && (config.mode !== old.mode || config.delay !== old.delay
+      || config.seconds !== old.seconds || config.limit !== old.limit)) {
+      scheduleTick();
     }
     if (!saved) status('warn', '设置保存失败 · 本页仍可使用');
     widget.render();
     widget.place();
   }
 
-  function collectToasts(mutations) {
-    const toasts = new Set();
+  function collectNotices(mutations) {
+    const notices = new Set();
     for (const change of mutations) {
       const element = isElement(change.target) ? change.target : change.target.parentElement;
-      const containing = element?.closest(UI.toast);
-      if (containing) toasts.add(containing);
-      for (const added of change.addedNodes) {
-        if (!isElement(added)) continue;
-        if (added.matches(UI.toast)) toasts.add(added);
-        else if (!added.closest(UI.message)) added.querySelectorAll(UI.toast).forEach((toast) => toasts.add(toast));
+      const enclosing = element?.closest('[data-sonner-toast]') || element?.closest(NOTICE_SELECTOR);
+      if (enclosing) notices.add(enclosing);
+      if (enclosing && inFlight?.notice === enclosing && change.type === 'childList'
+        && change.addedNodes.length === 1 && change.removedNodes.length === 1) {
+        const added = change.addedNodes[0];
+        const removed = change.removedNodes[0];
+        if (added.nodeType === Node.TEXT_NODE && removed.nodeType === Node.TEXT_NODE && added.data === removed.data) {
+          seenNotices.delete(enclosing);
+        }
+      }
+      if (enclosing && change.type === 'attributes' && change.oldValue !== null) {
+        // A provider may reuse one toast for loading -> error, including two identical failures.
+        const wasLoading = ['data-type', 'data-status', 'data-severity'].includes(change.attributeName)
+          && change.oldValue !== 'error' && element.getAttribute(change.attributeName) === 'error';
+        const reopened = (change.attributeName === 'hidden' && !element.hidden)
+          || (change.attributeName === 'data-removed' && change.oldValue === 'true'
+            && element.getAttribute('data-removed') !== 'true');
+        if (wasLoading || reopened) seenNotices.delete(enclosing);
+      }
+      if (element && seenNotices.has(element)) notices.add(element);
+      for (const node of change.addedNodes) {
+        if (!isElement(node) || node.closest(UI.prose)) continue;
+        if (node.matches(NOTICE_SELECTOR)) notices.add(node);
+        node.querySelectorAll(NOTICE_SELECTOR).forEach((notice) => notices.add(notice));
+      }
+      for (const node of change.removedNodes) {
+        if (!isElement(node) || node.isConnected) continue;
+        seenNotices.delete(node);
+        node.querySelectorAll(NOTICE_SELECTOR).forEach((notice) => seenNotices.delete(notice));
       }
     }
-    return toasts;
+    return notices;
   }
 
   function observePage() {
     let resultFrame = 0;
     const observer = new MutationObserver((mutations) => {
       syncRoute();
-      collectToasts(mutations).forEach((toast) => onToast(toast));
+      collectNotices(mutations).forEach(onNotice);
+      if (pending && !retryLimitReached() && Date.now() >= pending.failedAt + delayMs()) scheduleTick(32);
       if (inFlight && !resultFrame) {
         resultFrame = requestAnimationFrame(() => {
           resultFrame = 0;
-          checkResult();
+          if (!inFlight) return;
+          const view = readChat();
+          if (view.busy) {
+            inFlight.sawBusy = true;
+          } else if (replyArrived(inFlight.before, view)) {
+            resetChain();
+            status('on', '回复已生成 · 等候下次报错');
+          } else if (inFlight.sawBusy && inFlight.before?.kind === 'retry') {
+            const flight = inFlight;
+            flight.sawBusy = false;
+            // The toolbar and portal commit separately. Give a fresh notification
+            // a chance to arrive before treating an unchanged old banner as a new failure.
+            setTimeout(() => {
+              if (inFlight !== flight || chatKey() !== route) return;
+              const settled = readChat();
+              if (!settled.busy && !settled.needsJump && usable(settled.retry)
+                && sameTurn(flight.before, settled) && errorNotice(flight.notice)) {
+                seenNotices.delete(flight.notice);
+                onNotice(flight.notice);
+              }
+            }, 200);
+          }
         });
       }
     });
-    document.querySelectorAll(UI.toast).forEach((toast) => onToast(toast, true));
     observer.observe(document.body, {
-      childList: true, subtree: true, characterData: true,
-      attributes: true, attributeFilter: ['data-type', 'data-status', 'data-visible', 'aria-busy'],
+      childList: true, subtree: true, characterData: true, attributes: true, attributeOldValue: true,
+      attributeFilter: ['data-type', 'data-status', 'data-severity', 'data-state', 'data-removed',
+        'data-visible', 'data-toast-id', 'id', 'role', 'class', 'hidden', 'disabled', 'aria-disabled', 'aria-busy', 'aria-hidden', 'aria-live'],
     });
+    scanCurrentNotices();
     document.addEventListener('click', observeManualClick, true);
     document.addEventListener('keydown', observeEnter, true);
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) cancelPending();
-      else syncRoute();
+    function wakePage() {
+      syncRoute();
+      if (route && config.enabled) scanCurrentNotices();
+      scheduleTick();
+    }
+    document.addEventListener('visibilitychange', wakePage);
+    window.addEventListener('popstate', wakePage);
+    window.addEventListener('pageshow', wakePage);
+    window.addEventListener('pagehide', () => {
+      clearTimer();
     });
-    window.addEventListener('popstate', syncRoute);
-    window.addEventListener('pageshow', syncRoute);
-    window.addEventListener('pagehide', resetChain);
     if (typeof GM_addValueChangeListener === 'function') {
       GM_addValueChangeListener(STORAGE_KEY, (_key, _old, value, remote) => {
         if (remote) changeSettings(cleanSettings(value), true);
@@ -746,7 +801,7 @@
         font-size: 16px;
       }
       .seconds { text-align: right; }
-      .limit { width: 112px; }
+      .limit { width: auto; max-width: 60%; }
       .help { margin: 5px 0 0; color: var(--dim); font-size: 12px; }
       .orb-options { margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--line); }
       .opacity-row { display: flex; align-items: center; gap: 9px; margin-bottom: 1px; }
@@ -824,7 +879,7 @@
           </fieldset>
           <label class="compact"><span class="label">连续重试上限</span>
             <select class="limit" aria-label="连续重试上限">
-              <option value="unlimited">不限次数</option>
+              <option value="unlimited">直到成功（不限次数）</option>
             </select>
           </label>
           <div class="orb-options">
