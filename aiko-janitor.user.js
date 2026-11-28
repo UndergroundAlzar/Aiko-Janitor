@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Aiko Janitor
 // @namespace    aiko.janitor
-// @version      1.1.0
+// @version      1.1.1
 // @description  Janitor AI 聊天页报错后自动重试或重抽。单击小 Aiko 打开设置，双击开关。
 // @match        https://janitorai.com/*
 // @match        https://www.janitorai.com/*
@@ -44,6 +44,7 @@
     counter: '[class*="messageCounter"], [data-reply-counter]',
     choice: 'button[class*="botChoiceButton"]',
     next: 'button[class*="botChoiceButton"][class*="_right_"]',
+    directReroll: '[data-action="reroll"], [data-testid="reroll-response"]',
     more: 'button[class*="scrollToBottomButton"]',
     send: 'button[class*="_sendButton_"], button[data-action="send"]',
     stop: 'button[class*="_stopButton_"], button[data-action="stop"]',
@@ -173,7 +174,7 @@
     const variants = readVariants(choices);
     const next = choices && findButton(controls, (button) => choices.contains(button)
       && (button.matches(UI.next) || labelsMatch(button, NEXT_LABEL)));
-    const direct = findButton(controls, (button) => button.matches('[data-action="reroll"], [data-testid="reroll-response"]')
+    const direct = findButton(controls, (button) => button.matches(UI.directReroll)
       || labelsMatch(button, REROLL_LABEL));
     const retry = findButton(controls, (button) => !button.closest(UI.choices) && isRetryButton(button));
     const reroll = usable(direct) ? direct : (variants && variants.current === variants.count ? next : null);
@@ -219,14 +220,16 @@
 
   let config = loadSettings();
   let route = '';
+  let visit = 0;
   let pending = null;
   let inFlight = null;
+  let manualPress = null;
   let previousSend = null;
   let attempts = 0;
   let tickTimer = 0;
   let nextTickAt = Infinity;
   let currentStatus = { tone: 'off', text: '' };
-  let seenNotices = new WeakMap();
+  const seenNotices = new WeakMap();
 
   const host = document.createElement('aiko-janitor');
   host.id = HOST_ID;
@@ -254,6 +257,7 @@
 
   function resetChain() {
     clearTimer();
+    clearManualPress();
     pending = null;
     inFlight = null;
     previousSend = null;
@@ -264,6 +268,7 @@
     const next = chatKey();
     if (route === next) return;
     route = next;
+    visit += 1;
     resetChain();
     host.hidden = !next;
     widget.close(false);
@@ -297,17 +302,56 @@
     idleStatus();
   }
 
-  function observeManualClick(event) {
-    if (!event.isTrusted || !route || !isElement(event.target) || event.target === host) return;
+  function isComposerSend(button) {
+    return button.closest(UI.composer) && (button.matches(UI.send) || labelsMatch(button, SEND_LABEL));
+  }
+
+  function manualControl(event) {
+    if (!event.isTrusted || !route || !isElement(event.target) || event.target === host) return null;
     const button = event.target.closest('button, [role="button"]');
-    if (!button || !usable(button) || button.closest(UI.prose)) return;
-    if (button.closest(UI.composer) && (button.matches(UI.send) || labelsMatch(button, SEND_LABEL))) {
-      manualAction(true);
-    } else if (button.matches(UI.stop + ', ' + UI.choice) || button.closest(UI.choices)
+    if (!usable(button) || button.closest(UI.prose)) return null;
+    if (button.matches([UI.stop, UI.choice, UI.directReroll].join(', ')) || isComposerSend(button)
       || isRetryButton(button) || labelsMatch(button, REROLL_LABEL)
-      || (button.closest(UI.composer) && labelsMatch(button, STOP_LABEL))) {
-      manualAction();
-    }
+      || (button.closest(UI.composer) && labelsMatch(button, STOP_LABEL))
+      || (labelsMatch(button, NEXT_LABEL) && readChat().next === button)) return button;
+    return null;
+  }
+
+  function clearManualPress() {
+    if (!manualPress) return;
+    clearTimeout(manualPress.releaseTimer);
+    manualPress = null;
+  }
+
+  function resumeAfterPress() {
+    if (!manualPress) return;
+    clearManualPress();
+    scheduleTick();
+  }
+
+  function beginManualPress(event) {
+    if (!config.enabled || !route || !event.isTrusted) return;
+    const pointer = event.type === 'pointerdown';
+    if (pointer && (!event.isPrimary || event.button !== 0)) return;
+    if (!pointer && (event.repeat || event.isComposing || (event.key !== ' ' && event.key !== 'Enter'))) return;
+    const button = event.target === host ? event.composedPath().find((element) =>
+      isElement(element) && element.matches('.cancel, .switch')) : manualControl(event);
+    if (!button) return;
+    clearManualPress();
+    manualPress = { button, pointerId: event.pointerId, key: event.key, releaseTimer: 0 };
+  }
+
+  function finishManualPress(event) {
+    if (!event.isTrusted || !manualPress) return;
+    if (event.type === 'keyup' ? event.key !== manualPress.key : event.pointerId !== manualPress.pointerId) return;
+    if (event.type === 'pointercancel') return resumeAfterPress();
+    clearTimeout(manualPress.releaseTimer);
+    manualPress.releaseTimer = setTimeout(resumeAfterPress, event.pointerType === 'touch' ? 350 : 0);
+  }
+
+  function observeManualClick(event) {
+    const button = manualControl(event);
+    if (button) manualAction(Boolean(isComposerSend(button)));
   }
 
   function observeEnter(event) {
@@ -331,7 +375,7 @@
     tickTimer = setTimeout(tick, delay);
   }
 
-  function onNotice(element) {
+  function onNotice(element, replayVisible = false) {
     const notice = errorNotice(element);
     if (!notice) {
       seenNotices.delete(element);
@@ -339,9 +383,10 @@
     }
     const id = element.getAttribute('data-toast-id') || element.id;
     const previous = seenNotices.get(element);
-    seenNotices.set(element, { id, message: notice.message });
+    if (previous && previous.visit !== visit && previous.id === id) return;
+    seenNotices.set(element, { id, message: notice.message, visit });
     // Sonner may mount an empty title and fill it on a later render.
-    if (previous && previous.id === id && (!previous.message || previous.message === notice.message
+    if (!replayVisible && previous && previous.id === id && (!previous.message || previous.message === notice.message
       || notice.message.startsWith(previous.message + ' '))) return;
     if (!config.enabled || !route) return;
     if (pending) {
@@ -391,6 +436,7 @@
       scheduleTick(Math.min(remaining, 1000));
       return;
     }
+    if (manualPress?.button.isConnected) return status('wait', '等候手动操作完成');
 
     const view = readChat();
     if (replyArrived(pending.before, view)) {
@@ -441,8 +487,8 @@
     status('on', '本次自动重试已取消');
   }
 
-  function scanCurrentNotices() {
-    document.querySelectorAll(NOTICE_SELECTOR).forEach(onNotice);
+  function scanCurrentNotices(replayVisible = false) {
+    for (const notice of document.querySelectorAll(NOTICE_SELECTOR)) onNotice(notice, replayVisible);
   }
 
   function changeSettings(update, remote = false) {
@@ -453,9 +499,8 @@
       resetChain();
       idleStatus();
       if (config.enabled) {
-        seenNotices = new WeakMap();
         syncRoute();
-        scanCurrentNotices();
+        scanCurrentNotices(true);
       }
     } else if (pending && (config.mode !== old.mode || config.delay !== old.delay
       || config.seconds !== old.seconds || config.limit !== old.limit)) {
@@ -508,8 +553,9 @@
     let resultFrame = 0;
     const observer = new MutationObserver((mutations) => {
       syncRoute();
-      collectNotices(mutations).forEach(onNotice);
-      if (pending && !retryLimitReached() && Date.now() >= pending.failedAt + delayMs()) scheduleTick(32);
+      if (manualPress && !manualPress.button.isConnected) resumeAfterPress();
+      for (const notice of collectNotices(mutations)) onNotice(notice);
+      if (pending && !manualPress && !retryLimitReached() && Date.now() >= pending.failedAt + delayMs()) scheduleTick(32);
       if (inFlight && !resultFrame) {
         resultFrame = requestAnimationFrame(() => {
           resultFrame = 0;
@@ -544,17 +590,30 @@
         'data-visible', 'data-toast-id', 'id', 'role', 'class', 'hidden', 'disabled', 'aria-disabled', 'aria-busy', 'aria-hidden', 'aria-live'],
     });
     scanCurrentNotices();
+    document.addEventListener('pointerdown', beginManualPress, true);
+    window.addEventListener('pointerup', finishManualPress, true);
+    window.addEventListener('pointercancel', finishManualPress, true);
+    document.addEventListener('keydown', beginManualPress, true);
+    window.addEventListener('keyup', finishManualPress, true);
+    window.addEventListener('blur', resumeAfterPress);
     document.addEventListener('click', observeManualClick, true);
     document.addEventListener('keydown', observeEnter, true);
     function wakePage() {
+      if (document.hidden) resumeAfterPress();
       syncRoute();
       if (route && config.enabled) scanCurrentNotices();
       scheduleTick();
     }
     document.addEventListener('visibilitychange', wakePage);
+    window.navigation?.addEventListener('currententrychange', () => {
+      if (route === chatKey()) return;
+      for (const notice of collectNotices(observer.takeRecords())) onNotice(notice);
+      syncRoute();
+    });
     window.addEventListener('popstate', wakePage);
     window.addEventListener('pageshow', wakePage);
     window.addEventListener('pagehide', () => {
+      clearManualPress();
       clearTimer();
     });
     if (typeof GM_addValueChangeListener === 'function') {
